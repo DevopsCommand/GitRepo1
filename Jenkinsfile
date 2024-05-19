@@ -5,11 +5,13 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    // Checkout source code
-                    checkout scm
-
-                    // Build Docker image
-                    sh 'docker build -t myapp .'
+                    // Check if the requirements.txt file exists
+                    if (fileExists('requirements.txt')) {
+                        // Build Docker image
+                        sh 'docker build -t myapp .'
+                    } else {
+                        error "requirements.txt file not found"
+                    }
                 }
             }
         }
